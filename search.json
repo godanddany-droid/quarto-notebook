@@ -424,7 +424,7 @@
     "href": "week-01.html#r-work",
     "title": "Week 01 — Getting Started",
     "section": "R work",
-    "text": "R work\n\nx &lt;- rnorm(100)\nmean(x)\n\n[1] -0.06362135\n\nhist(x)",
+    "text": "R work\n\nx &lt;- rnorm(100)\nmean(x)\n\n[1] 0.0177672\n\nhist(x)",
     "crumbs": [
       "Home",
       "Weeks",
