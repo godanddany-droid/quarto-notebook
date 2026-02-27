@@ -1,0 +1,17 @@
+{
+  "hash": "b7d91ca7d8eb34c5caea79b9dfa9b17c",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Week 01 — Getting Started\"\nformat: html\n---\n\n\n## Goals\n- Learn the workflow\n- Run some R code\n\n## Notes\nWrite your notes here.\n\n## R work\n\n\n::: {.cell}\n\n```{.r .cell-code}\nx <- rnorm(100)\nmean(x)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 0.01618047\n```\n\n\n:::\n\n```{.r .cell-code}\nhist(x)\n```\n\n::: {.cell-output-display}\n![](week-01_files/figure-html/unnamed-chunk-1-1.png){width=672}\n:::\n:::\n\n",
+    "supporting": [
+      "week-01_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

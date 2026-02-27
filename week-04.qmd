@@ -1,0 +1,469 @@
+---
+title: "Week 04 - Exploratory Data Analysis (EDA)"
+format: html
+---
+
+## Monday
+
+## Exploratory Data Analysis (EDA)
+
+
+
+
+## EDA Mindset
+
+Is iterative, investigative and visual.
+
+Expect:
+-Go back and forth between steps 
+-Revise assumptions
+-Discover data issues late in the process
+-Ask better questions as you learn more
+
+
+
+## Understanding the context
+
+Before touching the data understand:
+-Where did the data come from
+-Why was it collected
+- Who or what does each row represent?
+-What decisions will this data support?
+
+Key questions
+-Is this observational or experimental data?
+-Are there known biases?
+-Is time involved
+-Are there units, definitions, or domain rules?
+
+Poor context understanding leads to correct analysis of the wrong problem.
+
+
+
+## Data Validation (Trust but verify)
+
+Validation answers one core question:
+
+Is this data structurally and logically valid?
+
+This step focuses on correctness, not insight.
+
+
+
+## Structural Validation
+
+-Do all columns exist?
+-Are data types correct
+-Are there unexpected nulls?
+-Are identifieres unique when they should be?
+
+
+
+## Logical Validation
+
+-Are values within expected ranges?
+-Do dates make sense chronologically?
+-Do relationships between variables violate domain rules?
+
+RED FLAGS:
+
+Negative ages
+Future timestamps
+Duplicate IDs
+Impossible combination of values
+
+
+
+## Data Cleaning(Fixing What's Broken)
+
+Cleaning addresses errors, inconsistencies, and noise.
+
+Typical tasks:
+
+-Handling missing values 
+-Fixing inconsistent labels or categories
+-Correcting obvious data entry errors 
+-Removing or flagging duplicates
+
+Important principle:
+
+Cleaning should be conservative and documented.
+
+Avoid "fixing" data unless:
+
+-You know the cause
+-The correction is defensible
+-you preserve original values when possible
+
+
+
+## Data Massaging (Making Data Usable)
+
+Massaging prepares data for analysis and exploration, not modeling.
+
+This step is about shape and representation.
+
+Common activities:
+
+-Renaming variables for clarity
+-Creating derived variables
+-Converting units or scales
+-Reshaping data (wide - Long)
+-Standardizing formats (dates, categories, text)
+
+Key idea:
+    Clean data can still be unusable massaging makes it analysis-ready.
+
+
+
+## Univariate Exploration (One Variable at a Time)
+
+Now you start learning what the data looks like.
+
+For each variable, ask:
+
+-What values occur?
+-What is typical?
+-What is extreme?
+-What is missing?
+
+Conceptually
+
+Numeric variables distribution, spread, skewness
+
+Categorical variables frequency, dominance, rarity
+
+This step builds baseline intuition.
+
+
+
+## Bivariate Exploration (Relationships)
+
+Next, explore how variables relate to each other.
+
+Ask questions like:
+
+-Does one variable change with another?
+-Are there strong associations?
+-Are relationships linear, nonlinear, or absent?
+
+Focus on:
+
+Direction
+Strength
+Consistency
+Exceptions
+
+    Many insights live in relationships, not individual variables.
+
+
+
+## Multivariate Exploration (Context Matters)
+
+Multivariate analysis looks at relationships conditiones on other variables.
+
+This helps answer:
+
+Does this relationship hold across groups?
+Is this pattern driven by a subset?
+Are there interaction effects?
+
+This step often reveals:
+
+Hidden structure 
+Cofounding Variables
+Simpson's paradox-type effects
+
+
+
+## Outliers and Anomalies (Signal or Noise?)
+
+Outliers are not automatically bad.
+
+Ask:
+Are they errors?
+Are they rare but valid cases?
+Do they represent a different process?
+
+Important distinction:
+Outlier extreme but valid
+Anomaly inconsistent with data-generating process
+
+    Never remove outliers without understanding them.
+
+
+
+## Assumptions checking
+
+Before modeling, EDA helps you check:
+
+Distributional assumptions
+Independence
+Stationarity (for time-based data)
+Linearity or monotonicity
+
+This step informs:
+
+Feature engineering
+Model Choice
+Transformation needs
+
+
+
+## EDA is Iterative
+
+EDA does not end cleanly.
+
+You will:
+
+Discover issues late
+Revisit Cleaning
+Create new variables mid-analysis
+change direction based on findings
+
+This is normal and expected.
+
+
+
+## Key Takeaways
+
+EDA is about understanding, not proving
+
+Most errors are found before modeling 
+
+
+
+## Wednesday (Lab EDA)
+
+
+```{r}
+?airquality
+```
+
+
+## Libraries to install
+
+
+
+```{r}
+# if you don't have these installed yet, run:
+# install.packages(c("dplyr", "ggplot2" , "tidyr" , "skimr"))
+library(dplyr)
+library(skimr)
+library(ggplot2)
+library(tidyr)
+
+
+```
+
+## 1.Explore
+
+ Load airquality to a new variable
+
+```{r}
+aq_raw <- airquality
+```
+
+
+
+
+## Lets eliminate the rows which have missing values for ozone
+
+```{r}
+library(dplyr)
+
+aq_raw |>
+    filter(
+    is.na(Ozone)
+    )
+```
+
+
+### Let's use skimr
+
+
+```{r}
+skim(aq_raw)
+```
+
+```{r}
+aq_little_clean <- aq_raw |>
+  filter(!is.na(Ozone))
+```
+
+```{r}
+skim(aq_little_clean)
+```
+
+
+## 2. Validate the data
+
+
+
+```{r}
+nrow(aq_raw)
+nrow(aq_little_clean)
+```
+
+
+
+```{r}
+names(aq_raw)
+```
+
+Total NA's per variables
+
+```{r}
+colSums(is.na(aq_raw))
+
+```
+
+Script logical validation to check if any values is suspecious
+
+```{r}
+aq_raw %>%
+summarize(
+month_min = min(Month, na.rm = TRUE),
+month_max = max(Month, na.rm = TRUE),
+day_min   = min(Day, na.rm = TRUE),
+day_max   = max(Day, na.rm = TRUE),
+temp_min  = min(Temp, na.rm = TRUE),
+temp_max  = max(Temp, na.rm = TRUE),
+wind_min  = min(Wind, na.rm = TRUE),
+wind_max  = max(Wind, na.rm = TRUE)
+)
+```
+
+
+## 3.Cleaning
+
+**Checking missing**
+
+
+```{r}
+aq_raw %>%
+summarize(
+missing_ozone  = sum(is.na(Ozone)),
+missing_solarR = sum(is.na(Solar.R)),
+missing_wind   = sum(is.na(Wind)),
+missing_temp   = sum(is.na(Temp))
+)
+```
+
+### 3.2 Decide on a missing data strategy
+
+
+```{r}
+aq_clean <- aq_raw %>%
+group_by(Month) %>%
+mutate(
+Ozone   = ifelse(is.na(Ozone),   median(Ozone, na.rm = TRUE),   Ozone),
+Solar.R = ifelse(is.na(Solar.R), median(Solar.R, na.rm = TRUE), Solar.R)
+) %>%
+ungroup()
+
+colSums(is.na(aq_clean))
+```
+
+## Do i have duplicates?
+
+
+
+```{r}
+aq_clean %>%
+count(Month, Day) %>%
+filter(n > 1)
+```
+
+
+### 4.Massage the data (make it analysis-ready)
+
+
+
+```{r}
+aq_tidy <- aq_clean %>%
+rename(
+ozone = Ozone,
+solar = Solar.R,
+wind  = Wind,
+temp  = Temp,
+month = Month,
+day   = Day
+)
+
+names(aq_tidy)
+```
+
+
+### 4.2 Create a proper date column
+
+
+
+```{r}
+aq_tidy <- aq_tidy %>%
+mutate(date = as.Date(sprintf("1973-%02d-%02d", month, day)))
+
+min(aq_tidy$date); max(aq_tidy$date)
+```
+
+### Changing the type of Month
+
+from int to factor
+
+
+
+```{r}
+aq_tidy <- aq_tidy %>%
+mutate(
+month_name = factor(
+month,
+levels = 5:9,
+labels = c("May", "Jun", "Jul", "Aug", "Sep")
+)
+)
+
+table(aq_tidy$month_name)
+```
+
+## Share your data with others
+
+
+
+```{r}
+aq_tidy <- aq_tidy %>%
+mutate(
+temp_c = (temp - 32) * 5/9,
+high_ozone = ozone > 84
+)
+
+aq_tidy %>% select(date, ozone, high_ozone, temp, temp_c) %>% head()
+```
+
+## 5.Exploratory Data Analysis (EDA)
+
+### Univariate Exploration
+
+```{r}
+aq_tidy %>%
+summarize(
+ozone_mean = mean(ozone),
+ozone_median = median(ozone),
+ozone_sd = sd(ozone),
+temp_mean = mean(temp),
+wind_mean = mean(wind)
+)
+```
+
+### Let's use hist() first
+
+```{r}
+hist(aq_tidy$ozone)
+```
+
+### Let's use ggplot for distribution visualization
+
+```{r}
+ggplot(aq_tidy, aes(x = ozone)) +
+    geom_histogram(bins = 20) +
+    labs(title = "Distribution of Ozone", x = "Ozone", y = "Count")
+```

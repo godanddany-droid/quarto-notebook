@@ -1,0 +1,40 @@
+project:
+  type: website
+
+website:
+  title: "Course Notebook Of Data Science: Foundations & applications"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
+      - href: index.qmd
+        text: Home
+      - section: "Weeks"
+        contents:
+          - href: week-01.qmd
+            text: "Week 01 — Getting Started"
+          - href: week-02.qmd
+            text: "Week 02 - R Refresher"
+          - href: week-03.qmd
+            text: "Week 03 - Working with Files and Data in R"
+          - href: week-04.qmd
+            text: "Week 04 - Exploratory Data Analysis (EDA)"
+          - href: week-05.qmd
+            text: "Week 05 - Exploratory Data Analysis (EDA)"
+          - href: week-06.qmd
+            text: "Week 06 - ggplot"
+          - href: week-07.qmd
+            text: "Week 07 - Bivariate and multivariate"
+      - section: "Group Project"
+        contents:
+          - href: Lab.qmd
+            text: "Lab"
+
+format:
+  html:
+    theme: cosmo
+    toc: true

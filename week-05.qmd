@@ -1,0 +1,228 @@
+---
+title: "Week 05 - Exploratory Data Analysis (EDA)"
+format: html
+---
+
+## Overview
+
+This week we continue our exploration of EDA, focusing on **distributions**, **outlier detection**, and **data transformation**. By the end of this week you should be able to:
+
+- Describe the shape, center, and spread of a distribution
+- Identify and handle outliers appropriately
+- Apply transformations to skewed data
+- Summarize grouped data using `dplyr`
+
+---
+
+## 1. Recap: What is EDA?
+
+Exploratory Data Analysis is the process of using statistical and visual tools to understand the structure of your data **before** modeling. It helps you:
+
+- Detect errors or anomalies
+- Understand variable distributions
+- Discover relationships between variables
+- Formulate hypotheses
+
+---
+
+## 2. Describing Distributions
+
+A distribution describes how values of a variable are spread. Key characteristics:
+
+- **Shape**: symmetric, left-skewed, right-skewed, bimodal
+- **Center**: mean, median
+- **Spread**: standard deviation, IQR, range
+- **Outliers**: unusual observations far from the bulk of the data
+
+### 2.1 Measures of Center and Spread
+
+```{r}
+# Load libraries
+library(tidyverse)
+
+# Use the built-in mpg dataset
+data(mpg)
+
+# Summary statistics
+summary(mpg$hwy)
+```
+
+```{r}
+# Manual calculations
+mean_hwy   <- mean(mpg$hwy)
+median_hwy <- median(mpg$hwy)
+sd_hwy     <- sd(mpg$hwy)
+iqr_hwy    <- IQR(mpg$hwy)
+
+cat("Mean:   ", mean_hwy, "\n")
+cat("Median: ", median_hwy, "\n")
+cat("SD:     ", sd_hwy, "\n")
+cat("IQR:    ", iqr_hwy, "\n")
+```
+
+> **Note:** When the mean > median, the distribution is likely **right-skewed**. When mean < median, it is **left-skewed**.
+
+---
+
+## 3. Visualizing Distributions
+
+### 3.1 Histogram
+
+A histogram groups continuous values into bins and shows their frequency.
+
+```{r}
+ggplot(mpg, aes(x = hwy)) +
+  geom_histogram(binwidth = 2, fill = "steelblue", color = "white") +
+  labs(
+    title = "Distribution of Highway MPG",
+    x = "Highway Miles Per Gallon",
+    y = "Count"
+  ) +
+  theme_minimal()
+```
+
+**What to look for:**
+
+- Is the distribution symmetric or skewed?
+- Are there multiple peaks (bimodal)?
+- Are there gaps or extreme values?
+
+### 3.2 Density Plot
+
+A density plot is a smoothed version of the histogram, useful for comparing groups.
+
+```{r}
+ggplot(mpg, aes(x = hwy)) +
+  geom_density(fill = "steelblue", alpha = 0.5) +
+  labs(
+    title = "Density of Highway MPG",
+    x = "Highway MPG",
+    y = "Density"
+  ) +
+  theme_minimal()
+```
+
+### 3.3 Boxplot
+
+Boxplots show the five-number summary: minimum, Q1, median, Q3, maximum — and flag potential outliers.
+
+```{r}
+ggplot(mpg, aes(x = class, y = hwy, fill = class)) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(
+    title = "Highway MPG by Vehicle Class",
+    x = "Class",
+    y = "Highway MPG"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+---
+
+## 4. Outlier Detection
+
+Outliers can be legitimate extreme values or data entry errors. A common rule is the **IQR method**:
+
+- Lower fence: Q1 − 1.5 × IQR
+- Upper fence: Q3 + 1.5 × IQR
+
+```{r}
+Q1 <- quantile(mpg$hwy, 0.25)
+Q3 <- quantile(mpg$hwy, 0.75)
+IQR_val <- Q3 - Q1
+
+lower <- Q1 - 1.5 * IQR_val
+upper <- Q3 + 1.5 * IQR_val
+
+outliers <- mpg %>% filter(hwy < lower | hwy > upper)
+cat("Number of outliers:", nrow(outliers), "\n")
+outliers
+```
+
+> **Important:** Outliers should not be removed automatically. Always investigate whether they represent real observations or data errors.
+
+---
+
+## 5. Data Transformation
+
+When data is strongly skewed, transformations can help normalize it for analysis and modeling.
+
+### 5.1 Log Transformation
+
+```{r}
+# Simulate right-skewed data
+set.seed(42)
+skewed_data <- tibble(x = exp(rnorm(500, mean = 3, sd = 1)))
+
+# Original vs log-transformed
+p1 <- ggplot(skewed_data, aes(x = x)) +
+  geom_histogram(fill = "salmon", color = "white", bins = 30) +
+  labs(title = "Original (Right-Skewed)", x = "x") +
+  theme_minimal()
+
+p2 <- ggplot(skewed_data, aes(x = log(x))) +
+  geom_histogram(fill = "steelblue", color = "white", bins = 30) +
+  labs(title = "Log-Transformed", x = "log(x)") +
+  theme_minimal()
+
+library(patchwork)
+p1 + p2
+```
+
+---
+
+## 6. Grouped Summaries with `dplyr`
+
+A key part of EDA is comparing distributions across groups.
+
+```{r}
+mpg %>%
+  group_by(class) %>%
+  summarise(
+    n          = n(),
+    mean_hwy   = mean(hwy),
+    sd_hwy     = sd(hwy),
+    median_hwy = median(hwy)
+  ) %>%
+  arrange(desc(mean_hwy))
+```
+
+```{r}
+# Visualize group means
+mpg %>%
+  group_by(class) %>%
+  summarise(mean_hwy = mean(hwy)) %>%
+  ggplot(aes(x = reorder(class, mean_hwy), y = mean_hwy, fill = class)) +
+  geom_col(show.legend = FALSE) +
+  coord_flip() +
+  labs(
+    title = "Average Highway MPG by Vehicle Class",
+    x = "Class",
+    y = "Mean Highway MPG"
+  ) +
+  theme_minimal()
+```
+
+---
+
+## 7. Summary
+
+| Concept              | Tool                              |
+|----------------------|-----------------------------------|
+| Distribution shape   | Histogram, Density plot           |
+| Center & spread      | `mean()`, `median()`, `sd()`, `IQR()` |
+| Outlier detection    | Boxplot, IQR rule                 |
+| Skewness correction  | Log / sqrt transformation         |
+| Group comparison     | `group_by()` + `summarise()`      |
+
+---
+
+## Key Takeaways
+
+- Always visualize distributions before computing statistics.
+- The mean is sensitive to outliers; the median is more robust.
+- Use boxplots to compare groups and spot outliers simultaneously.
+- Log transformation is effective for right-skewed data.
+- Grouped summaries reveal patterns that overall summaries hide.
+

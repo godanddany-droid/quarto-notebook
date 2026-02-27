@@ -1,0 +1,8 @@
+---
+title: "Home"
+---
+
+Welcome to my weekly course notebook.
+
+- Use the sidebar to navigate to each week.
+- Each week includes notes, code, and results.

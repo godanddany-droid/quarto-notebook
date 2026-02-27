@@ -1,0 +1,247 @@
+---
+title: "week 03 - Working with Files and Data in R"
+format: html
+---
+
+
+
+```{r}
+# Create a matrix
+m <- matrix(1:9, nrow = 3)
+m
+```
+
+my goal is to calculate the mean of each row of this matrix
+
+
+```{r}
+mean(c(1,4,7))
+mean(c(2,5,8))
+mean(c(3,6,9))
+```
+
+loops
+
+
+```{r}
+# Calculate row means using a for-loop
+row_means <- numeric(nrow(m))
+for (i in 1:nrow(m)) {
+  row_means[i] <- mean(m[i, ])
+}
+row_means
+```
+
+
+```{r}
+# Cleaner and more direct
+apply(m, 1, mean)
+```
+
+## lapply
+
+loop first
+
+
+```{r}
+data_list <- list(a = 1:5, b = 6:10, c = 11:15)
+squared_list <- list()
+
+for (i in seq_along(data_list)) {
+  squared_list[[i]] <- data_list[[i]]^2
+}
+squared_list
+```
+
+```{r}
+y <- function(x) {sin(x)}
+y(3.1415)
+```
+
+
+```{r}
+lapply(data_list, function(x) x^2)
+```
+
+## sapply
+
+
+```{r}
+# Returns a named numeric vector instead of a list
+sapply(data_list, mean)
+```
+
+Task for you what is the structure of this output? It is a vector, a list or something else?
+
+comparison with a loop
+
+
+```{r}
+means <- numeric(length(data_list))
+for (i in seq_along(data_list)) {
+  means[i] <- mean(data_list[[i]])
+}
+means
+```
+
+## vapply
+
+
+```{r}
+vapply(data_list, mean, numeric(1))
+```
+
+## tapply()
+
+
+```{r}
+heights <- c(160, 170, 180, 150, 165, 175)
+gender <- factor(c("F", "M", "M", "F", "F", "M"))
+
+# Average height by gender
+tapply(heights, gender, mean)
+```
+
+loop version
+
+```{r}
+means <- numeric(length(levels(gender)))
+for (i in seq_along(levels(gender))) {
+  group <- levels(gender)[i]
+  means[i] <- mean(heights[gender == group])
+}
+means
+```
+
+
+## mapply
+
+apply a function to multiple inputs in parallel
+
+
+```{r}
+# Multiply corresponding elements
+x <- 1:5
+y <- 6:10
+
+mapply(function(a, b) a * b, x, y)
+
+x*y
+```
+
+### Friday: Datasets in r
+
+### 1. Built-in datasets in base R
+
+```{r}
+data()
+```
+
+```{r}
+data(mtcars)
+?mtcars
+
+df <- mtcars
+str(df)
+head(df)[10]
+tail(df)[10]
+```
+
+```{r}
+data(penguins , package = "palmerpenguins")
+```
+
+```{r}
+df <- penguins
+str(df)
+
+```
+
+Statistical Summaries
+
+
+```{r}
+summary(df)
+```
+
+## Exercise 
+
+# List all available datasets in R
+
+```{r}
+data()
+```
+# Load the iris dataset
+
+```{r}
+df <- iris
+```
+# Inspect the structure of the dataset
+
+```{r}
+str(df)
+```
+# View a statistical summary of the dataset
+```{r}
+summary(df)
+```
+
+
+```{r}
+?iris
+```
+
+## How to find information
+
+```{r}
+help.search("motor")
+```
+
+
+## Exercise 2
+
+```{r}
+help(iris)
+```
+
+what the measurements represent:
+
+Whether the dataset includes a target or class variable?
+
+
+## identify dataset from what package
+
+```{r}
+data(package = "datasets")
+```
+
+
+
+```{r}
+data(package = "palmerpenguins")
+data(package = "modeldata")
+```
+
+
+## Exercise 3
+
+Load one dataset from {palmerpenguins} or {modeldata}.
+
+Print:
+
+dim()
+names()
+str()
+
+
+
+## Example: tidy inspection with tidyverse
+
+```{r}
+library(tidyverse)
+
+penguins %>%
+select(species, island, bill_length_mm, body_mass_g) %>%
+drop_na() %>%
+summary()
+```

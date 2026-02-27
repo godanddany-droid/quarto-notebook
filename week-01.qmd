@@ -1,0 +1,20 @@
+---
+title: "Week 01 — Getting Started"
+format: html
+---
+
+
+## Goals
+- Learn the workflow
+- Run some R code
+
+## Notes
+Write your notes here.
+
+## R work
+
+```{r}
+x <- rnorm(100)
+mean(x)
+hist(x)
+```

@@ -1,0 +1,278 @@
+---
+title: "Week 07 - Bivariate and Multivariate Analysis"
+format: html
+---
+
+## Overview
+
+This week we move beyond single-variable summaries into **bivariate** (two variables) and **multivariate** (three or more variables) analysis. Understanding relationships between variables is the foundation of data-driven insight and predictive modeling.
+
+By the end of this week you should be able to:
+
+- Compute and interpret correlation coefficients
+- Visualize relationships between two continuous variables
+- Analyze relationships involving categorical variables
+- Build and interpret a correlation matrix
+- Visualize three or more variables simultaneously
+
+---
+
+## 1. Bivariate Analysis
+
+Bivariate analysis examines the relationship between **two variables**. The approach depends on the variable types:
+
+| Variable 1   | Variable 2   | Method                          |
+|--------------|--------------|---------------------------------|
+| Continuous   | Continuous   | Scatter plot, correlation       |
+| Continuous   | Categorical  | Boxplot, grouped density        |
+| Categorical  | Categorical  | Bar chart, contingency table    |
+
+---
+
+## 2. Continuous vs. Continuous
+
+### 2.1 Scatter Plot
+
+The scatter plot is the most direct way to visualize a relationship between two numeric variables.
+
+```{r}
+library(tidyverse)
+data(mpg)
+
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(alpha = 0.5, color = "steelblue") +
+  geom_smooth(method = "lm", se = TRUE, color = "tomato") +
+  labs(
+    title = "Engine Displacement vs Highway MPG",
+    x = "Engine Displacement (L)",
+    y = "Highway MPG"
+  ) +
+  theme_minimal()
+```
+
+### 2.2 Pearson Correlation
+
+The **Pearson correlation coefficient (r)** measures the strength and direction of a linear relationship. It ranges from −1 to +1:
+
+- **r = 1**: perfect positive linear relationship
+- **r = 0**: no linear relationship
+- **r = −1**: perfect negative linear relationship
+
+```{r}
+cor_val <- cor(mpg$displ, mpg$hwy)
+cat("Pearson r:", round(cor_val, 3), "\n")
+```
+
+```{r}
+# Correlation test with p-value
+cor.test(mpg$displ, mpg$hwy)
+```
+
+> **Interpretation:** A negative correlation confirms that larger engines tend to have worse fuel efficiency. A p-value below 0.05 indicates this relationship is statistically significant.
+
+> **Caution:** Correlation measures **linear** association only. Always pair it with a scatter plot — two variables can have a strong non-linear relationship but a near-zero Pearson r.
+
+---
+
+## 3. Continuous vs. Categorical
+
+### 3.1 Grouped Boxplot
+
+```{r}
+ggplot(mpg, aes(x = reorder(class, hwy, median), y = hwy, fill = class)) +
+  geom_boxplot(show.legend = FALSE) +
+  coord_flip() +
+  labs(
+    title = "Highway MPG by Vehicle Class",
+    x = "Class",
+    y = "Highway MPG"
+  ) +
+  theme_minimal()
+```
+
+### 3.2 Grouped Density Plot
+
+```{r}
+ggplot(mpg, aes(x = hwy, fill = drv)) +
+  geom_density(alpha = 0.5) +
+  labs(
+    title = "Highway MPG Distribution by Drive Type",
+    x = "Highway MPG",
+    y = "Density",
+    fill = "Drive Type"
+  ) +
+  theme_minimal()
+```
+
+### 3.3 Violin Plot
+
+A violin plot combines a boxplot with a density estimate to show the full distribution shape.
+
+```{r}
+ggplot(mpg, aes(x = drv, y = hwy, fill = drv)) +
+  geom_violin(trim = FALSE, show.legend = FALSE) +
+  geom_boxplot(width = 0.1, fill = "white", show.legend = FALSE) +
+  labs(
+    title = "Highway MPG by Drive Type (Violin + Boxplot)",
+    x = "Drive Type",
+    y = "Highway MPG"
+  ) +
+  theme_minimal()
+```
+
+---
+
+## 4. Categorical vs. Categorical
+
+### 4.1 Contingency Table
+
+```{r}
+table(mpg$drv, mpg$class)
+```
+
+### 4.2 Stacked and Grouped Bar Charts
+
+```{r}
+# Proportional stacked bar
+ggplot(mpg, aes(x = class, fill = drv)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Drive Type Proportion within Each Vehicle Class",
+    x = "Class",
+    y = "Proportion",
+    fill = "Drive Type"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+```
+
+```{r}
+# Grouped bar chart
+ggplot(mpg, aes(x = class, fill = drv)) +
+  geom_bar(position = "dodge") +
+  labs(
+    title = "Count of Drive Types by Vehicle Class",
+    x = "Class",
+    y = "Count",
+    fill = "Drive Type"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+```
+
+---
+
+## 5. Correlation Matrix
+
+When working with multiple continuous variables, a correlation matrix gives a complete overview of pairwise relationships.
+
+```{r}
+# Select numeric columns
+num_vars <- mpg %>% select(displ, cyl, cty, hwy)
+
+# Compute correlation matrix
+cor_matrix <- cor(num_vars)
+round(cor_matrix, 2)
+```
+
+### 5.1 Visualizing with a Heatmap
+
+```{r}
+library(reshape2)
+
+# Melt correlation matrix for ggplot
+cor_melted <- melt(cor_matrix)
+
+ggplot(cor_melted, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = round(value, 2)), size = 4) +
+  scale_fill_gradient2(
+    low = "steelblue", mid = "white", high = "tomato",
+    midpoint = 0, limits = c(-1, 1)
+  ) +
+  labs(
+    title = "Correlation Matrix Heatmap",
+    x = NULL, y = NULL, fill = "r"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+```
+
+---
+
+## 6. Multivariate Visualization
+
+### 6.1 Encoding a Third Variable with Color or Size
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, color = class, size = cyl)) +
+  geom_point(alpha = 0.6) +
+  labs(
+    title = "Displacement vs MPG (Color = Class, Size = Cylinders)",
+    x = "Displacement (L)",
+    y = "Highway MPG",
+    color = "Class",
+    size = "Cylinders"
+  ) +
+  theme_minimal()
+```
+
+### 6.2 Faceted Scatter Plots
+
+Facets allow you to visualize a relationship across subgroups.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, color = drv)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~ year) +
+  labs(
+    title = "Displacement vs MPG by Drive Type, Faceted by Year",
+    x = "Displacement (L)",
+    y = "Highway MPG",
+    color = "Drive Type"
+  ) +
+  theme_minimal()
+```
+
+### 6.3 Scatterplot Matrix with `GGally`
+
+A scatterplot matrix shows all pairwise relationships at once — great for an initial multivariate overview.
+
+```{r}
+# install.packages("GGally") if needed
+library(GGally)
+
+mpg %>%
+  select(displ, cyl, cty, hwy, class) %>%
+  ggpairs(
+    aes(color = class, alpha = 0.5),
+    upper = list(continuous = wrap("cor", size = 3)),
+    lower = list(continuous = wrap("points", alpha = 0.3))
+  ) +
+  theme_minimal() +
+  labs(title = "Scatterplot Matrix of Key MPG Variables")
+```
+
+---
+
+## 7. Summary Table
+
+| Relationship Type      | Visualization            | Statistic               |
+|------------------------|--------------------------|-------------------------|
+| Continuous–Continuous  | Scatter + smooth line    | Pearson r               |
+| Continuous–Categorical | Boxplot, Violin, Density | Group means / medians   |
+| Categorical–Categorical| Stacked/grouped bar      | Contingency table       |
+| Multi-variable         | Facets, color+size, GGally scatterplot matrix | Correlation matrix |
+
+---
+
+## Key Takeaways
+
+- Always visualize relationships before computing statistics.
+- Pearson r only captures **linear** relationships — check with a scatter plot.
+- Boxplots and violin plots are powerful for comparing a numeric variable across groups.
+- Use proportional bar charts (`position = "fill"`) when comparing categorical distributions of unequal group sizes.
+- Correlation matrices and scatterplot matrices (`ggpairs`) are efficient for exploring many variables at once.
+- Facets are your best tool for adding a third variable to a bivariate plot without cluttering it.
+

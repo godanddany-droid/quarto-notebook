@@ -1,0 +1,188 @@
+---
+title: "Week 02 - R Refresher"
+format: html
+---
+
+## How we include figures in quarto?
+
+Here we will explore the basis and main data structures in R, for example
+
+### Vectors
+```{r}
+my_little_pony <- c("Twilight Sparkle", "Rainbow Dash", "Pinkie Pie", "Applejack", "Rarity")
+numbers_Vector <- c(seq(2,30,by=2))
+x_log <- c(TRUE, FALSE, FALSE, FALSE, TRUE)
+```
+
+### Matrices
+```{r}
+A <- matrix(1:6, nrow = 2, ncol = 3, byrow = TRUE)
+print(A)
+A
+```
+
+### 3D array
+```{r}
+a <- array(1:27, dim = c(3, 3, 3))
+a
+```
+
+### Lists
+```{r}
+my_list <- list(
+  numbers = 1:3,
+  letters = c("a", "b"),
+  matrix  = matrix(1:4, nrow = 2)
+)
+my_list
+```
+```{r}
+my_list$letters
+```
+
+### DataFrames
+```{r}
+vector1 <- c(seq(2,6,1))
+vector2 <- c(seq(3,7,1))
+vector3 <- c(letters[1:5])
+df <- data.frame(vector1, vector2)
+df
+df$vectors4 <- c(TRUE, FALSE, FALSE, FALSE, TRUE)
+```
+```{r}
+id    <- 1:5
+name  <- c("Alice", "Bob", "Cara", "Dan", "Enrique")
+score <- c(88, 92, 79, 85, NA)
+
+students <- data.frame(id, name, score)
+students
+
+mean(students$score, na.rm = TRUE)
+str(students)
+is.na(students$score)
+```
+
+### Add a new column using a condition
+```{r}
+students$passed <- students$score >= 85
+students
+```
+```{r}
+students$grade <- ifelse(
+  students$score >= 90, "A",
+  ifelse(students$score >= 80, "B", "C")
+)
+students
+```
+
+### Renaming variable names from a dataframe
+```{r}
+names(students)
+```
+
+### Selecting using square brackets
+```{r}
+students[, "score"]
+students[, 3]
+students[, c("score", "name")]
+students[, -1]
+```
+
+### Subselecting from a dataframe
+```{r}
+df <- students[students$score > 80, ]
+df
+remove(df)
+```
+
+### Factors
+```{r}
+gender_char <- c("F", "M", "F", "F", "M")
+gender_fact <- factor(gender_char)
+gender_fact
+```
+
+### Directory Paths
+```{r}
+getwd()
+```
+
+### Importing Data — CSV with readr
+```{r}
+library(readr)
+
+# Simulated data (in practice: students <- read_csv("data/students.csv"))
+students <- data.frame(
+  id    = 1:5,
+  name  = c("Alice", "Bob", "Cara", "Dan", "Enrique"),
+  score = c(88, 92, 79, 85, 91)
+)
+students
+```
+
+### Excel with readxl
+```{r}
+library(readxl)
+
+# Simulated data (in practice: grades <- read_excel("data/grades.xlsx"))
+grades <- data.frame(
+  id      = 1:4,
+  znumber = c("Z001", "Z002", "Z003", "Z004"),
+  midterm = c(85, 90, 78, 88),
+  final   = c(88, 92, 80, 85)
+)
+grades
+```
+
+### Parquet with arrow
+```{r}
+library(arrow)
+
+# Simulated data (in practice: big_data <- read_parquet("data/big_data.parquet"))
+big_data <- data.frame(
+  id    = 1:6,
+  value = c(10.5, 20.1, 30.3, 40.7, 50.2, 60.9),
+  group = c("A", "A", "B", "B", "C", "C")
+)
+big_data
+```
+
+### RData and RDS
+```{r}
+# Simulating save/load with temp files
+simple_model <- lm(score ~ id, data = students)
+tmp <- tempfile(fileext = ".rds")
+saveRDS(simple_model, tmp)
+model_restored <- readRDS(tmp)
+summary(model_restored)
+```
+
+### Writing CSV
+```{r}
+library(readr)
+write_csv(grades, "grades_clean.csv")
+cat("grades_clean.csv written successfully\n")
+```
+
+### Writing Excel
+```{r}
+library(writexl)
+write_xlsx(grades, "grades_export.xlsx")
+cat("grades_export.xlsx written successfully\n")
+```
+
+### Writing Parquet
+```{r}
+library(arrow)
+write_parquet(big_data, "big_data.parquet")
+cat("big_data.parquet written successfully\n")
+```
+
+### Saving RData and RDS
+```{r}
+save(students, grades, file = "class_data.RData")
+saveRDS(students, file = "students_clean.rds")
+load("class_data.RData")
+students_restored <- readRDS("students_clean.rds")
+students_restored
+```

@@ -1,0 +1,280 @@
+---
+title: "Week 06 - ggplot"
+format: html
+---
+
+## Overview
+
+This week we take a deep dive into **ggplot2**, R's most powerful and flexible visualization library. ggplot2 is built on the **Grammar of Graphics**, a principled framework for building plots layer by layer.
+
+By the end of this week you should be able to:
+
+- Understand the grammar of graphics and the `ggplot()` structure
+- Map variables to aesthetics (color, size, shape, etc.)
+- Use a variety of `geom_*` functions
+- Customize themes, labels, scales, and facets
+- Combine multiple plots
+
+---
+
+## 1. The Grammar of Graphics
+
+Every ggplot2 plot is built from the same components:
+
+| Component   | Description                                      |
+|-------------|--------------------------------------------------|
+| **Data**    | The dataset being visualized                     |
+| **Aesthetics** (`aes`) | Mappings from variables to visual properties |
+| **Geoms**   | The geometric objects drawn (points, bars, lines)|
+| **Stats**   | Statistical transformations (counts, smoothing)  |
+| **Scales**  | Controls over axes, colors, sizes                |
+| **Facets**  | Splitting the plot into subplots                 |
+| **Theme**   | Non-data visual elements (fonts, background)     |
+
+The basic syntax is always:
+
+```r
+ggplot(data = <DATA>, aes(<MAPPINGS>)) +
+  geom_<TYPE>(<OPTIONS>)
+```
+
+---
+
+## 2. Setting Up
+
+```{r}
+library(tidyverse)
+
+# We'll use mpg and diamonds datasets throughout
+data(mpg)
+data(diamonds)
+```
+
+---
+
+## 3. Core Geoms
+
+### 3.1 Scatter Plot — `geom_point()`
+
+Used to visualize the relationship between two continuous variables.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(color = "steelblue", alpha = 0.6, size = 2) +
+  labs(
+    title = "Engine Displacement vs Highway MPG",
+    x = "Engine Displacement (L)",
+    y = "Highway MPG"
+  ) +
+  theme_minimal()
+```
+
+### 3.2 Adding Color by Group
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, color = class)) +
+  geom_point(alpha = 0.7, size = 2) +
+  labs(
+    title = "Engine Displacement vs Highway MPG by Class",
+    x = "Engine Displacement (L)",
+    y = "Highway MPG",
+    color = "Vehicle Class"
+  ) +
+  theme_minimal()
+```
+
+### 3.3 Line Plot — `geom_line()`
+
+Useful for time series or ordered data.
+
+```{r}
+# Average MPG by year and drive type
+mpg %>%
+  group_by(year, drv) %>%
+  summarise(mean_hwy = mean(hwy), .groups = "drop") %>%
+  ggplot(aes(x = year, y = mean_hwy, color = drv, group = drv)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 3) +
+  labs(
+    title = "Average Highway MPG Over Time by Drive Type",
+    x = "Year",
+    y = "Mean Highway MPG",
+    color = "Drive Type"
+  ) +
+  theme_minimal()
+```
+
+### 3.4 Bar Chart — `geom_bar()` and `geom_col()`
+
+`geom_bar()` counts observations. `geom_col()` uses a pre-computed value.
+
+```{r}
+# Count of cars by class
+ggplot(mpg, aes(x = fct_infreq(class), fill = class)) +
+  geom_bar(show.legend = FALSE) +
+  labs(
+    title = "Number of Vehicles by Class",
+    x = "Vehicle Class",
+    y = "Count"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Pre-computed averages with geom_col
+mpg %>%
+  group_by(class) %>%
+  summarise(mean_hwy = mean(hwy)) %>%
+  ggplot(aes(x = reorder(class, mean_hwy), y = mean_hwy, fill = class)) +
+  geom_col(show.legend = FALSE) +
+  coord_flip() +
+  labs(title = "Average Highway MPG by Class", x = "Class", y = "Mean MPG") +
+  theme_minimal()
+```
+
+### 3.5 Histogram — `geom_histogram()`
+
+```{r}
+ggplot(mpg, aes(x = hwy)) +
+  geom_histogram(bins = 20, fill = "steelblue", color = "white") +
+  labs(title = "Highway MPG Distribution", x = "Highway MPG", y = "Count") +
+  theme_minimal()
+```
+
+### 3.6 Boxplot — `geom_boxplot()`
+
+```{r}
+ggplot(mpg, aes(x = drv, y = hwy, fill = drv)) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(title = "Highway MPG by Drive Type", x = "Drive Type", y = "Highway MPG") +
+  theme_minimal()
+```
+
+### 3.7 Smooth Line — `geom_smooth()`
+
+Adds a regression line or LOESS smoother.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(alpha = 0.4, color = "gray50") +
+  geom_smooth(method = "lm", color = "tomato", se = TRUE) +
+  labs(
+    title = "Engine Displacement vs Highway MPG (with Linear Fit)",
+    x = "Displacement (L)",
+    y = "Highway MPG"
+  ) +
+  theme_minimal()
+```
+
+---
+
+## 4. Aesthetics in Depth
+
+Aesthetics can be **mapped** (tied to a variable) or **set** (fixed for all observations).
+
+```{r}
+# Mapped: color varies by class
+ggplot(mpg, aes(x = displ, y = hwy, color = class)) +
+  geom_point()
+
+# Set: all points are red
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(color = "red")
+```
+
+Common aesthetics: `color`, `fill`, `size`, `shape`, `alpha`, `linetype`.
+
+---
+
+## 5. Scales
+
+Scales control how aesthetic mappings look.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, color = class)) +
+  geom_point(size = 2) +
+  scale_color_brewer(palette = "Set2") +
+  scale_x_continuous(breaks = seq(1, 7, by = 1)) +
+  labs(title = "Custom Color Scale and Axis Breaks") +
+  theme_minimal()
+```
+
+---
+
+## 6. Facets
+
+Facets split a plot into subplots based on one or two variables.
+
+```{r}
+# facet_wrap: one variable
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(color = "steelblue", alpha = 0.6) +
+  facet_wrap(~ class, ncol = 3) +
+  labs(title = "Displacement vs MPG Faceted by Class") +
+  theme_minimal()
+```
+
+```{r}
+# facet_grid: two variables
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(alpha = 0.5) +
+  facet_grid(drv ~ cyl) +
+  labs(title = "Faceted by Drive Type (rows) and Cylinders (cols)") +
+  theme_minimal()
+```
+
+---
+
+## 7. Themes and Labels
+
+```{r}
+ggplot(mpg, aes(x = class, y = hwy, fill = class)) +
+  geom_violin(show.legend = FALSE, trim = FALSE) +
+  geom_boxplot(width = 0.1, fill = "white", show.legend = FALSE) +
+  labs(
+    title    = "Highway MPG Distribution by Vehicle Class",
+    subtitle = "Violin plot with embedded boxplot",
+    caption  = "Source: ggplot2::mpg dataset",
+    x = "Vehicle Class",
+    y = "Highway MPG"
+  ) +
+  theme_classic() +
+  theme(
+    plot.title    = element_text(face = "bold", size = 14),
+    plot.subtitle = element_text(color = "gray40"),
+    axis.text.x   = element_text(angle = 30, hjust = 1)
+  )
+```
+
+**Built-in themes:** `theme_minimal()`, `theme_classic()`, `theme_bw()`, `theme_light()`, `theme_dark()`.
+
+---
+
+## 8. Combining Plots with `patchwork`
+
+```{r}
+library(patchwork)
+
+p1 <- ggplot(mpg, aes(x = hwy)) +
+  geom_histogram(fill = "steelblue", bins = 20) +
+  labs(title = "Histogram") + theme_minimal()
+
+p2 <- ggplot(mpg, aes(x = class, y = hwy)) +
+  geom_boxplot(fill = "salmon") +
+  labs(title = "Boxplot") + theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+p1 + p2
+```
+
+---
+
+## Key Takeaways
+
+- ggplot2 builds plots in layers using the Grammar of Graphics.
+- Always start with `ggplot(data, aes(...))` then add geoms.
+- Aesthetic mappings link variables to visual properties; setting fixes them.
+- Use `facet_wrap()` or `facet_grid()` to create small multiples.
+- `theme_*()` functions quickly change the overall look of a plot.
+- `patchwork` makes combining multiple plots easy.
+
