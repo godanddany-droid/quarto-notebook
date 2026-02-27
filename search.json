@@ -424,7 +424,7 @@
     "href": "week-01.html#r-work",
     "title": "Week 01 — Getting Started",
     "section": "R work",
-    "text": "R work\n\nx &lt;- rnorm(100)\nmean(x)\n\n[1] 0.12207\n\nhist(x)",
+    "text": "R work\n\nx &lt;- rnorm(100)\nmean(x)\n\n[1] 0.08019199\n\nhist(x)",
     "crumbs": [
       "Home",
       "Weeks",
@@ -446,84 +446,144 @@
     "href": "Lab/Lab.html",
     "title": "Lab 2 - Exploratory Data Analysis",
     "section": "",
-    "text": "library(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.2.0     ✔ readr     2.2.0\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.2     ✔ tibble    3.3.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.2\n✔ purrr     1.2.1     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\ndata(\"ToothGrowth\")\n\ntg_original &lt;- as_tibble(ToothGrowth)\ntg_clean &lt;- tg_original"
+    "text": "library(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.2.0     ✔ readr     2.2.0\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.2     ✔ tibble    3.3.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.2\n✔ purrr     1.2.1     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\ndata(\"ToothGrowth\")\n\ntg_original &lt;- as_tibble(ToothGrowth)\ntg_clean &lt;- tg_original",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Lab"
+    ]
   },
   {
     "objectID": "Lab/Lab.html#dataset-toothgrowth",
     "href": "Lab/Lab.html#dataset-toothgrowth",
     "title": "Lab 2 - Exploratory Data Analysis",
     "section": "",
-    "text": "library(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.2.0     ✔ readr     2.2.0\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.2     ✔ tibble    3.3.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.2\n✔ purrr     1.2.1     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\ndata(\"ToothGrowth\")\n\ntg_original &lt;- as_tibble(ToothGrowth)\ntg_clean &lt;- tg_original"
+    "text": "library(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.2.0     ✔ readr     2.2.0\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.2     ✔ tibble    3.3.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.2\n✔ purrr     1.2.1     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\ndata(\"ToothGrowth\")\n\ntg_original &lt;- as_tibble(ToothGrowth)\ntg_clean &lt;- tg_original",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Lab"
+    ]
   },
   {
     "objectID": "Lab/Lab.html#structural-validation",
     "href": "Lab/Lab.html#structural-validation",
     "title": "Lab 2 - Exploratory Data Analysis",
     "section": "2.1 Structural Validation",
-    "text": "2.1 Structural Validation\n\nglimpse(tg_clean)\n\nRows: 60\nColumns: 3\n$ len  &lt;dbl&gt; 4.2, 11.5, 7.3, 5.8, 6.4, 10.0, 11.2, 11.2, 5.2, 7.0, 16.5, 16.5,…\n$ supp &lt;fct&gt; VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, V…\n$ dose &lt;dbl&gt; 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1.0, 1.0, 1.0, …\n\nsummary(tg_clean)\n\n      len        supp         dose      \n Min.   : 4.20   OJ:30   Min.   :0.500  \n 1st Qu.:13.07   VC:30   1st Qu.:0.500  \n Median :19.25           Median :1.000  \n Mean   :18.81           Mean   :1.167  \n 3rd Qu.:25.27           3rd Qu.:2.000  \n Max.   :33.90           Max.   :2.000  \n\nanyNA(tg_clean)\n\n[1] FALSE\n\nsum(duplicated(tg_clean))\n\n[1] 5\n\n\nThe dataset contains 60 observations and 3 variables. There are no missing values and no duplicate rows."
+    "text": "2.1 Structural Validation\n\nglimpse(tg_clean)\n\nRows: 60\nColumns: 3\n$ len  &lt;dbl&gt; 4.2, 11.5, 7.3, 5.8, 6.4, 10.0, 11.2, 11.2, 5.2, 7.0, 16.5, 16.5,…\n$ supp &lt;fct&gt; VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, V…\n$ dose &lt;dbl&gt; 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1.0, 1.0, 1.0, …\n\nsummary(tg_clean)\n\n      len        supp         dose      \n Min.   : 4.20   OJ:30   Min.   :0.500  \n 1st Qu.:13.07   VC:30   1st Qu.:0.500  \n Median :19.25           Median :1.000  \n Mean   :18.81           Mean   :1.167  \n 3rd Qu.:25.27           3rd Qu.:2.000  \n Max.   :33.90           Max.   :2.000  \n\nanyNA(tg_clean)\n\n[1] FALSE\n\nsum(duplicated(tg_clean))\n\n[1] 5\n\n\nThe dataset contains 60 observations and 3 variables. There are no missing values and no duplicate rows.",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Lab"
+    ]
   },
   {
     "objectID": "Lab/Lab.html#logical-validation",
     "href": "Lab/Lab.html#logical-validation",
     "title": "Lab 2 - Exploratory Data Analysis",
     "section": "2.2 Logical Validation",
-    "text": "2.2 Logical Validation\n\ntg_clean %&gt;% distinct(dose)\n\n# A tibble: 3 × 1\n   dose\n  &lt;dbl&gt;\n1   0.5\n2   1  \n3   2  \n\nrange(tg_clean$len)\n\n[1]  4.2 33.9\n\ntg_clean %&gt;% count(supp)\n\n# A tibble: 2 × 2\n  supp      n\n  &lt;fct&gt; &lt;int&gt;\n1 OJ       30\n2 VC       30\n\ntg_clean %&gt;% count(supp, dose)\n\n# A tibble: 6 × 3\n  supp   dose     n\n  &lt;fct&gt; &lt;dbl&gt; &lt;int&gt;\n1 OJ      0.5    10\n2 OJ      1      10\n3 OJ      2      10\n4 VC      0.5    10\n5 VC      1      10\n6 VC      2      10\n\n\nAll tooth lengths are positive (4.2 to 33.9). Dose values are limited to 0.5, 1, and 2. The supplement groups are balanced with 10 observations per cell."
+    "text": "2.2 Logical Validation\n\ntg_clean %&gt;% distinct(dose)\n\n# A tibble: 3 × 1\n   dose\n  &lt;dbl&gt;\n1   0.5\n2   1  \n3   2  \n\nrange(tg_clean$len)\n\n[1]  4.2 33.9\n\ntg_clean %&gt;% count(supp)\n\n# A tibble: 2 × 2\n  supp      n\n  &lt;fct&gt; &lt;int&gt;\n1 OJ       30\n2 VC       30\n\ntg_clean %&gt;% count(supp, dose)\n\n# A tibble: 6 × 3\n  supp   dose     n\n  &lt;fct&gt; &lt;dbl&gt; &lt;int&gt;\n1 OJ      0.5    10\n2 OJ      1      10\n3 OJ      2      10\n4 VC      0.5    10\n5 VC      1      10\n6 VC      2      10\n\n\nAll tooth lengths are positive (4.2 to 33.9). Dose values are limited to 0.5, 1, and 2. The supplement groups are balanced with 10 observations per cell.",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Lab"
+    ]
   },
   {
     "objectID": "Lab/Lab.html#convert-dose-to-factor",
     "href": "Lab/Lab.html#convert-dose-to-factor",
     "title": "Lab 2 - Exploratory Data Analysis",
     "section": "Convert dose to factor",
-    "text": "Convert dose to factor\n\ntg_clean &lt;- tg_clean %&gt;%\n  mutate(dose = factor(dose))\n\nDose represents treatment levels rather than a continuous variable, so it should be a factor for proper grouping."
+    "text": "Convert dose to factor\n\ntg_clean &lt;- tg_clean %&gt;%\n  mutate(dose = factor(dose))\n\nDose represents treatment levels rather than a continuous variable, so it should be a factor for proper grouping.",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Lab"
+    ]
   },
   {
     "objectID": "Lab/Lab.html#recode-supplement-labels",
     "href": "Lab/Lab.html#recode-supplement-labels",
     "title": "Lab 2 - Exploratory Data Analysis",
     "section": "Recode supplement labels",
-    "text": "Recode supplement labels\n\ntg_clean &lt;- tg_clean %&gt;%\n  mutate(supp = recode(supp, \"OJ\" = \"Orange Juice\", \"VC\" = \"Ascorbic Acid\"))\n\nFull labels make plots easier to read without needing to look up abbreviations."
+    "text": "Recode supplement labels\n\ntg_clean &lt;- tg_clean %&gt;%\n  mutate(supp = recode(supp, \"OJ\" = \"Orange Juice\", \"VC\" = \"Ascorbic Acid\"))\n\nFull labels make plots easier to read without needing to look up abbreviations.",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Lab"
+    ]
   },
   {
     "objectID": "Lab/Lab.html#create-derived-variable",
     "href": "Lab/Lab.html#create-derived-variable",
     "title": "Lab 2 - Exploratory Data Analysis",
     "section": "Create derived variable",
-    "text": "Create derived variable\n\ntg_clean &lt;- tg_clean %&gt;%\n  mutate(growth_level = if_else(len &gt; mean(len), \"High\", \"Low\"))\n\nThis new variable categorizes growth relative to the average for easier pattern detection."
+    "text": "Create derived variable\n\ntg_clean &lt;- tg_clean %&gt;%\n  mutate(growth_level = if_else(len &gt; mean(len), \"High\", \"Low\"))\n\nThis new variable categorizes growth relative to the average for easier pattern detection.",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Lab"
+    ]
   },
   {
     "objectID": "Lab/Lab.html#tooth-length-distribution",
     "href": "Lab/Lab.html#tooth-length-distribution",
     "title": "Lab 2 - Exploratory Data Analysis",
     "section": "Tooth Length Distribution",
-    "text": "Tooth Length Distribution\n\nggplot(tg_clean, aes(x = len)) +\n  geom_histogram(bins = 12, fill = \"#3498DB\", color = \"white\") +\n  geom_vline(xintercept = mean(tg_clean$len), linetype = \"dashed\") +\n  labs(title = \"Distribution of Tooth Length\", x = \"Tooth Length\", y = \"Count\")\n\n\n\n\n\n\n\n\nThe distribution is approximately symmetric. The mean and median are close, with a considerable spread suggesting treatment effects explain much of the variation."
+    "text": "Tooth Length Distribution\n\nggplot(tg_clean, aes(x = len)) +\n  geom_histogram(bins = 12, fill = \"#3498DB\", color = \"white\") +\n  geom_vline(xintercept = mean(tg_clean$len), linetype = \"dashed\") +\n  labs(title = \"Distribution of Tooth Length\", x = \"Tooth Length\", y = \"Count\")\n\n\n\n\n\n\n\n\nThe distribution is approximately symmetric. The mean and median are close, with a considerable spread suggesting treatment effects explain much of the variation.",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Lab"
+    ]
   },
   {
     "objectID": "Lab/Lab.html#supplement-frequency",
     "href": "Lab/Lab.html#supplement-frequency",
     "title": "Lab 2 - Exploratory Data Analysis",
     "section": "Supplement Frequency",
-    "text": "Supplement Frequency\n\nggplot(tg_clean, aes(x = supp, fill = supp)) +\n  geom_bar(width = 0.6) +\n  scale_fill_manual(values = c(\"Orange Juice\" = \"#F39C12\", \"Ascorbic Acid\" = \"#2980B9\")) +\n  labs(title = \"Supplement Type Distribution\", x = NULL, y = \"Count\") +\n  theme(legend.position = \"none\")\n\n\n\n\n\n\n\n\nThe dataset is evenly split between supplement types (30 each)."
+    "text": "Supplement Frequency\n\nggplot(tg_clean, aes(x = supp, fill = supp)) +\n  geom_bar(width = 0.6) +\n  scale_fill_manual(values = c(\"Orange Juice\" = \"#F39C12\", \"Ascorbic Acid\" = \"#2980B9\")) +\n  labs(title = \"Supplement Type Distribution\", x = NULL, y = \"Count\") +\n  theme(legend.position = \"none\")\n\n\n\n\n\n\n\n\nThe dataset is evenly split between supplement types (30 each).",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Lab"
+    ]
   },
   {
     "objectID": "Lab/Lab.html#dose-frequency",
     "href": "Lab/Lab.html#dose-frequency",
     "title": "Lab 2 - Exploratory Data Analysis",
     "section": "Dose Frequency",
-    "text": "Dose Frequency\n\nggplot(tg_clean, aes(x = dose, fill = dose)) +\n  geom_bar(width = 0.6) +\n  scale_fill_manual(values = c(\"#1ABC9C\", \"#3498DB\", \"#9B59B6\")) +\n  labs(title = \"Dose Level Distribution\", x = \"Dose (mg)\", y = \"Count\") +\n  theme(legend.position = \"none\")\n\n\n\n\n\n\n\n\nEach dose level has 20 observations — a balanced design."
+    "text": "Dose Frequency\n\nggplot(tg_clean, aes(x = dose, fill = dose)) +\n  geom_bar(width = 0.6) +\n  scale_fill_manual(values = c(\"#1ABC9C\", \"#3498DB\", \"#9B59B6\")) +\n  labs(title = \"Dose Level Distribution\", x = \"Dose (mg)\", y = \"Count\") +\n  theme(legend.position = \"none\")\n\n\n\n\n\n\n\n\nEach dose level has 20 observations — a balanced design.",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Lab"
+    ]
   },
   {
     "objectID": "Lab/Lab.html#dose-vs-tooth-length",
     "href": "Lab/Lab.html#dose-vs-tooth-length",
     "title": "Lab 2 - Exploratory Data Analysis",
     "section": "Dose vs Tooth Length",
-    "text": "Dose vs Tooth Length\nI expected higher doses to produce longer teeth since vitamin C supports tissue growth.\n\nggplot(tg_clean, aes(x = dose, y = len, fill = dose)) +\n  geom_boxplot(alpha = 0.7) +\n  geom_jitter(width = 0.15, alpha = 0.5, size = 2) +\n  scale_fill_manual(values = c(\"#1ABC9C\", \"#3498DB\", \"#9B59B6\")) +\n  labs(title = \"Tooth Length by Dose\", x = \"Dose (mg)\", y = \"Tooth Length\") +\n  theme(legend.position = \"none\")\n\n\n\n\n\n\n\n\nTooth length clearly increases with dosage, confirming the expectation. The relationship is monotonic and strong."
+    "text": "Dose vs Tooth Length\nI expected higher doses to produce longer teeth since vitamin C supports tissue growth.\n\nggplot(tg_clean, aes(x = dose, y = len, fill = dose)) +\n  geom_boxplot(alpha = 0.7) +\n  geom_jitter(width = 0.15, alpha = 0.5, size = 2) +\n  scale_fill_manual(values = c(\"#1ABC9C\", \"#3498DB\", \"#9B59B6\")) +\n  labs(title = \"Tooth Length by Dose\", x = \"Dose (mg)\", y = \"Tooth Length\") +\n  theme(legend.position = \"none\")\n\n\n\n\n\n\n\n\nTooth length clearly increases with dosage, confirming the expectation. The relationship is monotonic and strong.",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Lab"
+    ]
   },
   {
     "objectID": "Lab/Lab.html#supplement-vs-tooth-length",
     "href": "Lab/Lab.html#supplement-vs-tooth-length",
     "title": "Lab 2 - Exploratory Data Analysis",
     "section": "Supplement vs Tooth Length",
-    "text": "Supplement vs Tooth Length\nI expected Orange Juice to be slightly more effective than Ascorbic Acid.\n\nggplot(tg_clean, aes(x = supp, y = len, fill = supp)) +\n  geom_boxplot(alpha = 0.7) +\n  geom_jitter(width = 0.1, alpha = 0.5, size = 2) +\n  scale_fill_manual(values = c(\"Orange Juice\" = \"#F39C12\", \"Ascorbic Acid\" = \"#2980B9\")) +\n  labs(title = \"Tooth Length by Supplement\", x = NULL, y = \"Tooth Length\") +\n  theme(legend.position = \"none\")\n\n\n\n\n\n\n\n\nOrange Juice shows a moderately higher median, but the distributions overlap. The effect is weaker than the dose effect."
+    "text": "Supplement vs Tooth Length\nI expected Orange Juice to be slightly more effective than Ascorbic Acid.\n\nggplot(tg_clean, aes(x = supp, y = len, fill = supp)) +\n  geom_boxplot(alpha = 0.7) +\n  geom_jitter(width = 0.1, alpha = 0.5, size = 2) +\n  scale_fill_manual(values = c(\"Orange Juice\" = \"#F39C12\", \"Ascorbic Acid\" = \"#2980B9\")) +\n  labs(title = \"Tooth Length by Supplement\", x = NULL, y = \"Tooth Length\") +\n  theme(legend.position = \"none\")\n\n\n\n\n\n\n\n\nOrange Juice shows a moderately higher median, but the distributions overlap. The effect is weaker than the dose effect.",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Lab"
+    ]
   },
   {
     "objectID": "week-02.html",
