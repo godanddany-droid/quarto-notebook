@@ -424,7 +424,7 @@
     "href": "week-01.html#r-work",
     "title": "Week 01 — Getting Started",
     "section": "R work",
-    "text": "R work\n\nx &lt;- rnorm(100)\nmean(x)\n\n[1] 0.0177672\n\nhist(x)",
+    "text": "R work\n\nx &lt;- rnorm(100)\nmean(x)\n\n[1] -0.07648621\n\nhist(x)",
     "crumbs": [
       "Home",
       "Weeks",
@@ -439,6 +439,102 @@
     "text": "Welcome to my weekly course notebook.\n\nUse the sidebar to navigate to each week.\nEach week includes notes, code, and results.",
     "crumbs": [
       "Home"
+    ]
+  },
+  {
+    "objectID": "GroupProject/Project.html",
+    "href": "GroupProject/Project.html",
+    "title": "Group Project - Tic-Tac-Toe Endgame Dataset",
+    "section": "",
+    "text": "This database encodes the complete set of possible board configurations at the end of tic-tac-toe games, where “x” is assumed to have played first. The target concept is “win for x” (i.e., true when “x” has one of 8 possible ways to create a “three-in-a-row”).\nInterestingly, this raw database gives a stripped-down decision tree algorithm (e.g., ID3) fits. However, the rule-based CN2 algorithm, the simple IB1 instance-based learning algorithm, and the CITRE feature-constructing decision tree algorithm perform well on it.",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Project"
+    ]
+  },
+  {
+    "objectID": "GroupProject/Project.html#group-work",
+    "href": "GroupProject/Project.html#group-work",
+    "title": "Group Project - Tic-Tac-Toe Endgame Dataset",
+    "section": "",
+    "text": "This database encodes the complete set of possible board configurations at the end of tic-tac-toe games, where “x” is assumed to have played first. The target concept is “win for x” (i.e., true when “x” has one of 8 possible ways to create a “three-in-a-row”).\nInterestingly, this raw database gives a stripped-down decision tree algorithm (e.g., ID3) fits. However, the rule-based CN2 algorithm, the simple IB1 instance-based learning algorithm, and the CITRE feature-constructing decision tree algorithm perform well on it.",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Project"
+    ]
+  },
+  {
+    "objectID": "GroupProject/Project.html#engineer-features",
+    "href": "GroupProject/Project.html#engineer-features",
+    "title": "Group Project - Tic-Tac-Toe Endgame Dataset",
+    "section": "4.1 · Engineer features",
+    "text": "4.1 · Engineer features\n\nttt_feat &lt;- ttt %&gt;%\n  mutate(\n    x_count   = rowSums(across(tl:br, ~ . == \"x\")),\n    o_count   = rowSums(across(tl:br, ~ . == \"o\")),\n    b_count   = rowSums(across(tl:br, ~ . == \"b\")),\n    center_x  = as.integer(mm == \"x\"),\n    corners_x = rowSums(across(c(tl, tr, bl, br), ~ . == \"x\")),\n    win       = as.integer(class == \"positive\")\n  )\n\nglimpse(ttt_feat)\n\nRows: 958\nColumns: 16\n$ tl        &lt;chr&gt; \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", …\n$ tm        &lt;chr&gt; \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", …\n$ tr        &lt;chr&gt; \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", …\n$ ml        &lt;chr&gt; \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\", …\n$ mm        &lt;chr&gt; \"o\", \"o\", \"o\", \"o\", \"o\", \"o\", \"o\", \"o\", \"o\", \"b\", \"b\", \"b\", …\n$ mr        &lt;chr&gt; \"o\", \"o\", \"o\", \"o\", \"o\", \"o\", \"b\", \"b\", \"b\", \"o\", \"o\", \"o\", …\n$ bl        &lt;chr&gt; \"x\", \"o\", \"o\", \"o\", \"b\", \"b\", \"o\", \"o\", \"b\", \"o\", \"o\", \"b\", …\n$ bm        &lt;chr&gt; \"o\", \"x\", \"o\", \"b\", \"o\", \"b\", \"o\", \"b\", \"o\", \"o\", \"b\", \"o\", …\n$ br        &lt;chr&gt; \"o\", \"o\", \"x\", \"b\", \"b\", \"o\", \"b\", \"o\", \"o\", \"b\", \"o\", \"o\", …\n$ class     &lt;chr&gt; \"positive\", \"positive\", \"positive\", \"positive\", \"positive\", …\n$ x_count   &lt;dbl&gt; 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 4, 4, 4, 4, 4, …\n$ o_count   &lt;dbl&gt; 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 3, 3, 3, 3, 3, …\n$ b_count   &lt;dbl&gt; 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 2, 2, 2, 2, 2, …\n$ center_x  &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, …\n$ corners_x &lt;dbl&gt; 3, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 3, 2, 2, 2, 2, 2, …\n$ win       &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Project"
+    ]
+  },
+  {
+    "objectID": "GroupProject/Project.html#structure-summary",
+    "href": "GroupProject/Project.html#structure-summary",
+    "title": "Group Project - Tic-Tac-Toe Endgame Dataset",
+    "section": "4.2 · Structure & summary",
+    "text": "4.2 · Structure & summary\n\nsummary(ttt_feat[, c(\"x_count\",\"o_count\",\"b_count\",\"corners_x\",\"center_x\",\"win\")])\n\n    x_count         o_count         b_count        corners_x    \n Min.   :3.000   Min.   :2.000   Min.   :0.000   Min.   :0.000  \n 1st Qu.:3.000   1st Qu.:3.000   1st Qu.:1.000   1st Qu.:1.000  \n Median :4.000   Median :3.000   Median :2.000   Median :2.000  \n Mean   :3.802   Mean   :3.132   Mean   :2.067   Mean   :1.745  \n 3rd Qu.:4.000   3rd Qu.:4.000   3rd Qu.:3.000   3rd Qu.:2.000  \n Max.   :5.000   Max.   :4.000   Max.   :4.000   Max.   :4.000  \n    center_x           win        \n Min.   :0.0000   Min.   :0.0000  \n 1st Qu.:0.0000   1st Qu.:0.0000  \n Median :0.0000   Median :1.0000  \n Mean   :0.4781   Mean   :0.6534  \n 3rd Qu.:1.0000   3rd Qu.:1.0000  \n Max.   :1.0000   Max.   :1.0000",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Project"
+    ]
+  },
+  {
+    "objectID": "GroupProject/Project.html#class-distribution",
+    "href": "GroupProject/Project.html#class-distribution",
+    "title": "Group Project - Tic-Tac-Toe Endgame Dataset",
+    "section": "6.1 · Class Distribution",
+    "text": "6.1 · Class Distribution\n\nggplot(ttt, aes(x = class, fill = class)) +\n  geom_bar(show.legend = FALSE) +\n  geom_text(stat = \"count\", aes(label = after_stat(count)),\n            vjust = -0.5, size = 5) +\n  scale_fill_manual(values = c(\"positive\" = \"steelblue\", \"negative\" = \"salmon\")) +\n  labs(\n    title    = \"Class Distribution: X Wins vs X Loses\",\n    subtitle = \"958 total endgame boards\",\n    x = \"Outcome\", y = \"Count\"\n  ) +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\nAbout 65.3% of boards end in a win for x. The dataset is moderately imbalanced.",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Project"
+    ]
+  },
+  {
+    "objectID": "GroupProject/Project.html#multivariate-plot-x-count-corner-control-and-outcome",
+    "href": "GroupProject/Project.html#multivariate-plot-x-count-corner-control-and-outcome",
+    "title": "Group Project - Tic-Tac-Toe Endgame Dataset",
+    "section": "6.2 · Multivariate Plot — X Count, Corner Control, and Outcome",
+    "text": "6.2 · Multivariate Plot — X Count, Corner Control, and Outcome\n\nttt_feat %&gt;%\n  mutate(\n    outcome   = ifelse(win == 1, \"X Wins\", \"X Loses\"),\n    corners_x = factor(corners_x, labels = paste(0:4, \"corners\"))\n  ) %&gt;%\n  ggplot(aes(x = factor(x_count), fill = corners_x)) +\n  geom_bar(position = \"fill\") +\n  facet_wrap(~ outcome) +\n  scale_fill_brewer(palette = \"Blues\") +\n  labs(\n    title    = \"Board Composition by Outcome\",\n    subtitle = \"X count on board · corner control · win result\",\n    x        = \"Number of X's on Board\",\n    y        = \"Proportion\",\n    fill     = \"Corners held by X\"\n  ) +\n  theme_minimal() +\n  theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\nWhen x has more pieces and controls more corners, the win proportion rises sharply.",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Project"
+    ]
+  },
+  {
+    "objectID": "GroupProject/Project.html#square-importance-heatmap",
+    "href": "GroupProject/Project.html#square-importance-heatmap",
+    "title": "Group Project - Tic-Tac-Toe Endgame Dataset",
+    "section": "6.3 · Square Importance Heatmap",
+    "text": "6.3 · Square Importance Heatmap\n\nsquare_wins &lt;- ttt %&gt;%\n  pivot_longer(cols = tl:br, names_to = \"square\", values_to = \"piece\") %&gt;%\n  filter(piece == \"x\") %&gt;%\n  group_by(square) %&gt;%\n  summarise(\n    total    = n(),\n    wins     = sum(class == \"positive\"),\n    win_rate = wins / total,\n    .groups  = \"drop\"\n  ) %&gt;%\n  mutate(\n    row = case_when(\n      square %in% c(\"tl\",\"tm\",\"tr\") ~ \"Top\",\n      square %in% c(\"ml\",\"mm\",\"mr\") ~ \"Middle\",\n      TRUE ~ \"Bottom\"\n    ),\n    col = case_when(\n      square %in% c(\"tl\",\"ml\",\"bl\") ~ \"Left\",\n      square %in% c(\"tm\",\"mm\",\"bm\") ~ \"Center\",\n      TRUE ~ \"Right\"\n    ),\n    row = factor(row, levels = c(\"Top\",\"Middle\",\"Bottom\")),\n    col = factor(col, levels = c(\"Left\",\"Center\",\"Right\"))\n  )\n\nggplot(square_wins, aes(x = col, y = fct_rev(row), fill = win_rate)) +\n  geom_tile(color = \"white\", linewidth = 2) +\n  geom_text(aes(label = scales::percent(win_rate, accuracy = 1)),\n            size = 6, fontface = \"bold\") +\n  scale_fill_gradient(low = \"lightyellow\", high = \"steelblue\",\n                      labels = scales::percent) +\n  labs(\n    title    = \"Win Rate per Board Square (when held by X)\",\n    subtitle = \"Darker = higher win rate when x occupies that square\",\n    x = NULL, y = NULL, fill = \"Win Rate\"\n  ) +\n  theme_minimal() +\n  theme(\n    axis.text       = element_text(size = 12, face = \"bold\"),\n    panel.grid      = element_blank(),\n    legend.position = \"right\"\n  )\n\n\n\n\n\n\n\n\n\nThe center and corner squares have the highest win rates — consistent with classic tic-tac-toe strategy.",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Project"
+    ]
+  },
+  {
+    "objectID": "GroupProject/Project.html#animated-plot-win-rate-as-x-accumulates-squares",
+    "href": "GroupProject/Project.html#animated-plot-win-rate-as-x-accumulates-squares",
+    "title": "Group Project - Tic-Tac-Toe Endgame Dataset",
+    "section": "6.4 · Animated Plot — Win Rate as X Accumulates Squares",
+    "text": "6.4 · Animated Plot — Win Rate as X Accumulates Squares\n\nanim_data &lt;- ttt_feat %&gt;%\n  mutate(center_label = ifelse(center_x == 1,\n                               \"X holds center\",\n                               \"X does NOT hold center\")) %&gt;%\n  group_by(x_count, center_label) %&gt;%\n  summarise(\n    win_rate = mean(win),\n    n        = n(),\n    .groups  = \"drop\"\n  ) %&gt;%\n  filter(n &gt;= 5)\n\nanim &lt;- ggplot(anim_data,\n               aes(x = x_count, y = win_rate,\n                   color = center_label, size = n)) +\n  geom_point(alpha = 0.85) +\n  geom_line(aes(group = center_label), linewidth = 1.2) +\n  scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +\n  scale_color_manual(values = c(\"X holds center\"         = \"steelblue\",\n                                \"X does NOT hold center\" = \"salmon\")) +\n  scale_size_continuous(range = c(4, 12), guide = \"none\") +\n  labs(\n    title    = \"Win Rate as X Accumulates Squares\",\n    subtitle = \"X count on board: {closest_state}\",\n    x        = \"Number of X's on Board\",\n    y        = \"Win Rate\",\n    color    = \"Center Square\"\n  ) +\n  theme_minimal() +\n  theme(legend.position = \"bottom\") +\n  transition_states(x_count, transition_length = 2, state_length = 1) +\n  shadow_mark(alpha = 0.3, size = 3) +\n  enter_fade() +\n  exit_fade()\n\nanimate(anim, nframes = 60, fps = 8, width = 700, height = 450,\n        units = \"px\", res = 96,\n        renderer = gifski_renderer())\n\n\n\n\n\n\n\n\n\nCenter control dramatically increases win rate at every level of x count.",
+    "crumbs": [
+      "Home",
+      "Group Project",
+      "Project"
     ]
   },
   {
